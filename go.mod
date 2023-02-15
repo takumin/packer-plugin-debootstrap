@@ -1,4 +1,4 @@
-module github.com/takumin/packer-plugin-boilerplate
+module github.com/takumin/packer-plugin-debootstrap
 
 go 1.19
 
