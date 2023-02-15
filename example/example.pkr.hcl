@@ -1,15 +1,15 @@
 packer {
   required_plugins {
-    boilerplate = {
+    debootstrap = {
       version = ">= 0.0.1"
-      source  = "github.com/takumin/boilerplate"
+      source  = "github.com/takumin/debootstrap"
     }
   }
 }
 
-source "boilerplate" "example" {
+source "debootstrap" "example" {
 }
 
 build {
-  sources = ["source.boilerplate.example"]
+  sources = ["source.debootstrap.example"]
 }
