@@ -18,6 +18,9 @@ type FlatConfig struct {
 	PackerOnError       *string           `mapstructure:"packer_on_error" cty:"packer_on_error" hcl:"packer_on_error"`
 	PackerUserVars      map[string]string `mapstructure:"packer_user_variables" cty:"packer_user_variables" hcl:"packer_user_variables"`
 	PackerSensitiveVars []string          `mapstructure:"packer_sensitive_variables" cty:"packer_sensitive_variables" hcl:"packer_sensitive_variables"`
+	Suite               *string           `mapstructure:"suite" required:"true" cty:"suite" hcl:"suite"`
+	TargetDir           *string           `mapstructure:"target_dir" required:"true" cty:"target_dir" hcl:"target_dir"`
+	MirrorURL           *string           `mapstructure:"mirror_url" required:"true" cty:"mirror_url" hcl:"mirror_url"`
 }
 
 // FlatMapstructure returns a new FlatConfig.
@@ -40,6 +43,9 @@ func (*FlatConfig) HCL2Spec() map[string]hcldec.Spec {
 		"packer_on_error":            &hcldec.AttrSpec{Name: "packer_on_error", Type: cty.String, Required: false},
 		"packer_user_variables":      &hcldec.AttrSpec{Name: "packer_user_variables", Type: cty.Map(cty.String), Required: false},
 		"packer_sensitive_variables": &hcldec.AttrSpec{Name: "packer_sensitive_variables", Type: cty.List(cty.String), Required: false},
+		"suite":                      &hcldec.AttrSpec{Name: "suite", Type: cty.String, Required: false},
+		"target_dir":                 &hcldec.AttrSpec{Name: "target_dir", Type: cty.String, Required: false},
+		"mirror_url":                 &hcldec.AttrSpec{Name: "mirror_url", Type: cty.String, Required: false},
 	}
 	return s
 }

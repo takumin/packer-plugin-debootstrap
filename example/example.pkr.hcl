@@ -8,6 +8,9 @@ packer {
 }
 
 source "debootstrap" "example" {
+  suite = "bullseye"
+  target_dir = "/tmp/rootfs"
+  mirror_url = "http://deb.debian.org/debian"
 }
 
 build {

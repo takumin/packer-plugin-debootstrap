@@ -31,6 +31,11 @@ func (b *Builder) Prepare(raws ...interface{}) (generatedVars []string, warnings
 
 func (b *Builder) Run(ctx context.Context, ui packer.Ui, hook packer.Hook) (packer.Artifact, error) {
 	steps := []multistep.Step{
+		&StepDebootstrap{
+			suite:     b.config.Suite,
+			targetDir: b.config.TargetDir,
+			mirrorURL: b.config.MirrorURL,
+		},
 		new(commonsteps.StepProvision),
 	}
 
