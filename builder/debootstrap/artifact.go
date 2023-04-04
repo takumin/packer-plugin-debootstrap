@@ -1,4 +1,4 @@
-package example
+package debootstrap
 
 type Artifact struct {
 	StateData map[string]interface{}

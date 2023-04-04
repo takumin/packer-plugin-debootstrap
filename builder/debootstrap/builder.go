@@ -1,4 +1,4 @@
-package example
+package debootstrap
 
 import (
 	"context"
@@ -10,7 +10,7 @@ import (
 	"github.com/hashicorp/packer-plugin-sdk/packer"
 )
 
-const BuilderId = "example.builder"
+const BuilderId = "debootstrap.builder"
 
 type Builder struct {
 	config Config

@@ -6,7 +6,7 @@ import (
 
 	"github.com/hashicorp/packer-plugin-sdk/plugin"
 
-	exampleBuilder "github.com/takumin/packer-plugin-debootstrap/builder/example"
+	debootstrapBuilder "github.com/takumin/packer-plugin-debootstrap/builder/debootstrap"
 	exampleDataSource "github.com/takumin/packer-plugin-debootstrap/datasource/example"
 	examplePostProcessor "github.com/takumin/packer-plugin-debootstrap/post-processor/example"
 	exampleProvisioner "github.com/takumin/packer-plugin-debootstrap/provisioner/example"
@@ -16,7 +16,7 @@ import (
 
 func main() {
 	pps := plugin.NewSet()
-	pps.RegisterBuilder(plugin.DEFAULT_NAME, new(exampleBuilder.Builder))
+	pps.RegisterBuilder(plugin.DEFAULT_NAME, new(debootstrapBuilder.Builder))
 	pps.RegisterProvisioner(plugin.DEFAULT_NAME, new(exampleProvisioner.Provisioner))
 	pps.RegisterPostProcessor(plugin.DEFAULT_NAME, new(examplePostProcessor.PostProcessor))
 	pps.RegisterDatasource(plugin.DEFAULT_NAME, new(exampleDataSource.Datasource))

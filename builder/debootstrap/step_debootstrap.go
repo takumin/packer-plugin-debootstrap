@@ -1,4 +1,4 @@
-package example
+package debootstrap
 
 import (
 	"bufio"
