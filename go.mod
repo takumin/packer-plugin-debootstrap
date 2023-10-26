@@ -109,4 +109,4 @@ require (
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 )
 
-replace github.com/zclconf/go-cty => github.com/nywilken/go-cty v1.12.1
+replace github.com/zclconf/go-cty => github.com/nywilken/go-cty v1.13.3
