@@ -5,9 +5,6 @@ go 1.19
 require (
 	github.com/hashicorp/hcl/v2 v2.20.1
 	github.com/hashicorp/packer-plugin-sdk v0.5.3
-
-	// https://github.com/hashicorp/packer-plugin-sdk/issues/128#issuecomment-1235716326
-	github.com/zclconf/go-cty v1.14.4
 )
 
 require (
@@ -103,5 +100,8 @@ require (
 	google.golang.org/grpc v1.50.1 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 )
+
+// https://github.com/hashicorp/packer-plugin-sdk/issues/187
+require github.com/zclconf/go-cty v1.14.4
 
 replace github.com/zclconf/go-cty => github.com/nywilken/go-cty v1.13.3
