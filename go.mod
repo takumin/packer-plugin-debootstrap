@@ -7,6 +7,8 @@ require (
 	github.com/hashicorp/packer-plugin-sdk v0.5.3
 )
 
+require github.com/hashicorp/go-immutable-radix v1.3.1 // indirect
+
 require (
 	cloud.google.com/go v0.114.0 // indirect
 	cloud.google.com/go/auth v0.5.0 // indirect
@@ -46,7 +48,6 @@ require (
 	github.com/hashicorp/go-getter/s3/v2 v2.2.2 // indirect
 	github.com/hashicorp/go-getter/v2 v2.2.2 // indirect
 	github.com/hashicorp/go-hclog v1.6.3 // indirect
-	github.com/hashicorp/go-immutable-radix v1.3.1 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/hashicorp/go-retryablehttp v0.7.7 // indirect
 	github.com/hashicorp/go-rootcerts v1.0.2 // indirect
