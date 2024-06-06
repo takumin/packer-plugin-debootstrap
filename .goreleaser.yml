@@ -28,5 +28,3 @@ checksum:
   algorithm: sha256
 release:
   prerelease: auto
-changelog:
-  skip: true
