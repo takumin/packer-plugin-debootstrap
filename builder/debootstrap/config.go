@@ -4,6 +4,7 @@ package debootstrap
 
 import (
 	"errors"
+	"os"
 
 	"github.com/hashicorp/packer-plugin-sdk/common"
 	"github.com/hashicorp/packer-plugin-sdk/packer"
@@ -29,6 +30,11 @@ func (c *Config) Prepare(raws ...interface{}) ([]string, error) {
 	}, raws...)
 	if err != nil {
 		return nil, err
+	}
+
+	mirrorURL, ok := os.LookupEnv("DEBOOTSTRAP_MIRROR_URL")
+	if ok {
+		c.MirrorURL = mirrorURL
 	}
 
 	var errs *packer.MultiError
