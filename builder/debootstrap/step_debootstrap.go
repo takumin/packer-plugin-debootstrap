@@ -61,6 +61,8 @@ func (s *StepDebootstrap) Run(ctx context.Context, state multistep.StateBag) mul
 		return multistep.ActionHalt
 	}
 
+	state.Put("mount_path", s.targetDir)
+
 	return multistep.ActionContinue
 }
 
