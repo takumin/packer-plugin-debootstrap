@@ -82,4 +82,21 @@ func (s *StepDebootstrap) Run(ctx context.Context, state multistep.StateBag) mul
 }
 
 func (s *StepDebootstrap) Cleanup(state multistep.StateBag) {
+	ui := state.Get("ui").(packer.Ui)
+	wrappedCommand := state.Get("wrappedCommand").(common.CommandWrapper)
+
+	cleanupCommand, err := wrappedCommand(fmt.Sprintf(
+		"rm -fr %s",
+		s.targetDir,
+	))
+	if err != nil {
+		ui.Error(err.Error())
+		return
+	}
+
+	cmd := common.ShellCommand(cleanupCommand)
+	if err := cmd.Run(); err != nil {
+		ui.Error(err.Error())
+		return
+	}
 }
