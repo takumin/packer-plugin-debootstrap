@@ -8,11 +8,17 @@ packer {
 }
 
 source "debootstrap" "example" {
-  suite = "bullseye"
+  suite      = "bullseye"
   target_dir = "/tmp/rootfs"
   mirror_url = "http://deb.debian.org/debian"
 }
 
 build {
   sources = ["source.debootstrap.example"]
+
+  provisioner "shell" {
+    inline = [
+      "echo Hello World!",
+    ]
+  }
 }

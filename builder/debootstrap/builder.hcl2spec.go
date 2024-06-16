@@ -21,6 +21,7 @@ type FlatConfig struct {
 	Suite               *string           `mapstructure:"suite" required:"true" cty:"suite" hcl:"suite"`
 	TargetDir           *string           `mapstructure:"target_dir" required:"true" cty:"target_dir" hcl:"target_dir"`
 	MirrorURL           *string           `mapstructure:"mirror_url" required:"true" cty:"mirror_url" hcl:"mirror_url"`
+	CommandWrapper      *string           `mapstructure:"command_wrapper" required:"false" cty:"command_wrapper" hcl:"command_wrapper"`
 }
 
 // FlatMapstructure returns a new FlatConfig.
@@ -46,6 +47,7 @@ func (*FlatConfig) HCL2Spec() map[string]hcldec.Spec {
 		"suite":                      &hcldec.AttrSpec{Name: "suite", Type: cty.String, Required: false},
 		"target_dir":                 &hcldec.AttrSpec{Name: "target_dir", Type: cty.String, Required: false},
 		"mirror_url":                 &hcldec.AttrSpec{Name: "mirror_url", Type: cty.String, Required: false},
+		"command_wrapper":            &hcldec.AttrSpec{Name: "command_wrapper", Type: cty.String, Required: false},
 	}
 	return s
 }
