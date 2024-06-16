@@ -1,13 +1,19 @@
+//go:generate packer-sdc mapstructure-to-hcl2 -type Config
+
 package debootstrap
 
 import (
 	"context"
 	"errors"
+	"os"
 
 	"github.com/hashicorp/hcl/v2/hcldec"
+	"github.com/hashicorp/packer-plugin-sdk/common"
 	"github.com/hashicorp/packer-plugin-sdk/multistep"
 	"github.com/hashicorp/packer-plugin-sdk/multistep/commonsteps"
 	"github.com/hashicorp/packer-plugin-sdk/packer"
+	"github.com/hashicorp/packer-plugin-sdk/template/config"
+	"github.com/hashicorp/packer-plugin-sdk/template/interpolate"
 )
 
 const BuilderId = "debootstrap.builder"
@@ -17,15 +23,53 @@ type Builder struct {
 	runner multistep.Runner
 }
 
+type Config struct {
+	common.PackerConfig `mapstructure:",squash"`
+
+	Suite     string `mapstructure:"suite" required:"true"`
+	TargetDir string `mapstructure:"target_dir" required:"true"`
+	MirrorURL string `mapstructure:"mirror_url" required:"true"`
+
+	ctx interpolate.Context
+}
+
 func (b *Builder) ConfigSpec() hcldec.ObjectSpec {
 	return b.config.FlatMapstructure().HCL2Spec()
 }
 
 func (b *Builder) Prepare(raws ...interface{}) (generatedVars []string, warnings []string, err error) {
-	warnings, err = b.config.Prepare(raws...)
+	err = config.Decode(&b.config, &config.DecodeOpts{
+		PluginType:         BuilderId,
+		Interpolate:        true,
+		InterpolateContext: &b.config.ctx,
+	}, raws...)
 	if err != nil {
-		return nil, warnings, err
+		return nil, nil, err
 	}
+
+	mirrorURL, ok := os.LookupEnv("DEBOOTSTRAP_MIRROR_URL")
+	if ok {
+		b.config.MirrorURL = mirrorURL
+	}
+
+	var errs *packer.MultiError
+
+	if b.config.Suite == "" {
+		errs = packer.MultiErrorAppend(errs, errors.New("required suite"))
+	}
+
+	if b.config.TargetDir == "" {
+		errs = packer.MultiErrorAppend(errs, errors.New("required target_dir"))
+	}
+
+	if b.config.MirrorURL == "" {
+		errs = packer.MultiErrorAppend(errs, errors.New("required mirror_url"))
+	}
+
+	if errs != nil && len(errs.Errors) > 0 {
+		return nil, warnings, errs
+	}
+
 	return nil, warnings, nil
 }
 
