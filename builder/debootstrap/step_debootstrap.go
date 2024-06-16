@@ -3,8 +3,10 @@ package debootstrap
 import (
 	"bufio"
 	"context"
+	"fmt"
 	"os/exec"
 
+	"github.com/hashicorp/packer-plugin-sdk/common"
 	"github.com/hashicorp/packer-plugin-sdk/multistep"
 	"github.com/hashicorp/packer-plugin-sdk/packer"
 )
@@ -17,9 +19,22 @@ type StepDebootstrap struct {
 
 func (s *StepDebootstrap) Run(ctx context.Context, state multistep.StateBag) multistep.StepAction {
 	ui := state.Get("ui").(packer.Ui)
+	wrappedCommand := state.Get("wrappedCommand").(common.CommandWrapper)
+
+	debootstrapCommand, err := wrappedCommand(fmt.Sprintf(
+		"debootstrap %s %s %s",
+		s.suite,
+		s.targetDir,
+		s.mirrorURL,
+	))
+	if err != nil {
+		ui.Error(err.Error())
+		return multistep.ActionHalt
+	}
 
 	// #nosec G204
-	cmd := exec.CommandContext(ctx, "sudo", "debootstrap", s.suite, s.targetDir, s.mirrorURL)
+	cmd := exec.CommandContext(ctx, "/bin/sh", "-c", debootstrapCommand)
+	ui.Message(fmt.Sprintf("Deboostrap command: %v", debootstrapCommand))
 
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
