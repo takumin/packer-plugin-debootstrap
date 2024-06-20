@@ -26,5 +26,9 @@ archives:
 checksum:
   name_template: '{{ .ProjectName }}_v{{ .Version }}_SHA256SUMS'
   algorithm: sha256
+signs:
+- artifacts: checksum
+  env:
+  - GNUPGHOME=secret/gpghome
 release:
   prerelease: auto
