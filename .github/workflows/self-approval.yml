@@ -14,10 +14,9 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-    - name: Checkout
-      uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
     - name: Self Approval
-      run: gh pr review --approve "${PR_NUMBER}"
+      run: gh pr review --repo "${REPOSITORY}" --approve "${PR_NUMBER}"
       env:
+        REPOSITORY: ${{ github.repository }}
         PR_NUMBER: ${{ github.event.number }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
