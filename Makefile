@@ -20,7 +20,12 @@ LDFLAGS_REVISION := -X "$(PKGNAME)/version.Revision=$(REVISION)"
 LDFLAGS          := -s -w -buildid= $(LDFLAGS_VERSION) $(LDFLAGS_REVISION) -extldflags -static
 BUILDFLAGS       := -trimpath -ldflags '$(LDFLAGS)'
 
-API_VERSION := x5.0
+API_VERSION != \
+	if [ ! -f .packer-api-version ]; then \
+		go run . describe | jq -r '.api_version' > .packer-api-version; \
+	fi; \
+	cat .packer-api-version
+
 PLUGIN_REPO := $(shell echo "$(PKGNAME)" | sed -E 's/packer-plugin-//')
 PLUGIN_NAME := $(APPNAME)_$(VERSION)_$(API_VERSION)_$(shell go env GOOS)_$(shell go env GOARCH)
 PLUGIN_PATH := $(HOME)/.packer.d/plugins/$(PLUGIN_REPO)
@@ -96,13 +101,13 @@ secret/gpghome:
 		future-default default 0
 
 .PHONY: snapshot
-snapshot: build gpg
-	API_VERSION="$(shell ./bin/$(APPNAME) describe | jq -r '.api_version')" goreleaser release --clean --snapshot
+snapshot: gpg
+	API_VERSION=$(API_VERSION) goreleaser release --clean --snapshot
 
 .PHONY: release
-release: build gpg
+release: gpg
 ifneq ($(GITHUB_TOKEN),)
-	API_VERSION="$(shell ./bin/$(APPNAME) describe | jq -r '.api_version')" goreleaser release --clean
+	API_VERSION=$(API_VERSION) goreleaser release --clean
 endif
 
 .PHONY: clean
