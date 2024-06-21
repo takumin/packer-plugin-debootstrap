@@ -1,5 +1,8 @@
 /bin/
 /dist/
 /secret/
+/.task/
 crash.log
 .packer-api-version
+coverage.out
+coverage.html
