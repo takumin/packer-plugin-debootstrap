@@ -17,6 +17,6 @@ jobs:
     - name: Self Approval
       run: gh pr review --repo "${REPOSITORY}" --approve "${PR_NUMBER}"
       env:
-        REPOSITORY: ${{ .github.repository }}
+        REPOSITORY: ${{ github.repository }}
         PR_NUMBER: ${{ github.event.number }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
