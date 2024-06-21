@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"os"
+	"strings"
 
 	"github.com/hashicorp/hcl/v2/hcldec"
 	"github.com/hashicorp/packer-plugin-sdk/chroot"
@@ -61,7 +62,10 @@ func (b *Builder) Prepare(raws ...interface{}) (generatedVars []string, warnings
 
 	mirrorURL, ok := os.LookupEnv("DEBOOTSTRAP_MIRROR_URL")
 	if ok {
-		b.config.MirrorURL = mirrorURL
+		mirrorURL = strings.TrimSpace(mirrorURL)
+		if mirrorURL != "" {
+			b.config.MirrorURL = mirrorURL
+		}
 	}
 
 	if b.config.CommandWrapper == "" {

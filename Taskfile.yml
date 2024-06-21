@@ -209,5 +209,8 @@ tasks:
   run:
     run: once
     deps: [install]
+    env:
+      DEBOOTSTRAP_MIRROR_URL:
+        sh: curl -fsLo /dev/null 'http://localhost:3142/debian' && echo 'http://localhost:3142/debian' || echo ''
     cmds:
       - packer build example
