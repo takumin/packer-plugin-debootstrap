@@ -2,3 +2,4 @@
 /dist/
 /secret/
 crash.log
+.packer-api-version
