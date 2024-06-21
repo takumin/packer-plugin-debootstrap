@@ -5,6 +5,8 @@ package debootstrap
 import (
 	"context"
 	"errors"
+	"fmt"
+	"net/url"
 	"os"
 	"strings"
 
@@ -85,6 +87,18 @@ func (b *Builder) Prepare(raws ...interface{}) (generatedVars []string, warnings
 	if b.config.MirrorURL == "" {
 		errs = packer.MultiErrorAppend(errs, errors.New("required mirror_url"))
 	}
+
+	mirrorUrl, err := url.Parse(b.config.MirrorURL)
+	if err != nil {
+		errs = packer.MultiErrorAppend(errs, fmt.Errorf("debootstrap mirror url: %w", err))
+	}
+	switch mirrorUrl.Scheme {
+	case "http":
+	case "https":
+	default:
+		errs = packer.MultiErrorAppend(errs, fmt.Errorf("debootstrap mirror url: unknown scheme: %s", mirrorUrl.Scheme))
+	}
+	b.config.MirrorURL = mirrorUrl.String()
 
 	if errs != nil && len(errs.Errors) > 0 {
 		return nil, warnings, errs
