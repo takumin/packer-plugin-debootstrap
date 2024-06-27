@@ -159,7 +159,7 @@ tasks:
 
   build:
     run: once
-    deps: [fmt]
+    deps: [test]
     sources:
       - '**/*.go'
       - exclude: '**/*_test.go'
