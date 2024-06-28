@@ -8,6 +8,8 @@ import (
 	"fmt"
 	"net/url"
 	"os"
+	"path"
+	"path/filepath"
 	"strings"
 
 	"github.com/hashicorp/hcl/v2/hcldec"
@@ -74,6 +76,10 @@ func (b *Builder) Prepare(raws ...interface{}) (generatedVars []string, warnings
 		b.config.CommandWrapper = "sudo {{.Command}}"
 	}
 
+	if b.config.MountPath == "" {
+		b.config.MountPath = path.Join(os.TempDir(), "rootfs")
+	}
+
 	var errs *packer.MultiError
 
 	if b.config.Suite == "" {
@@ -87,6 +93,12 @@ func (b *Builder) Prepare(raws ...interface{}) (generatedVars []string, warnings
 	if b.config.MirrorURL == "" {
 		errs = packer.MultiErrorAppend(errs, errors.New("required mirror_url"))
 	}
+
+	mount_path, err := filepath.Abs(b.config.MountPath)
+	if err != nil {
+		errs = packer.MultiErrorAppend(errs, fmt.Errorf("debootstrap target dir: %w", err))
+	}
+	b.config.MountPath = mount_path
 
 	mirrorUrl, err := url.Parse(b.config.MirrorURL)
 	if err != nil {
