@@ -137,9 +137,9 @@ func (b *Builder) Run(ctx context.Context, ui packer.Ui, hook packer.Hook) (pack
 			MountDevice: b.config.MountDevice,
 		},
 		&StepDebootstrap{
-			suite:      b.config.Suite,
-			mount_path: b.config.MountPath,
-			mirrorURL:  b.config.MirrorURL,
+			Suite:     b.config.Suite,
+			MountPath: b.config.MountPath,
+			MirrorURL: b.config.MirrorURL,
 		},
 		&chroot.StepChrootProvision{},
 	}
