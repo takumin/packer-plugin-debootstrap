@@ -86,10 +86,6 @@ func (b *Builder) Prepare(raws ...interface{}) (generatedVars []string, warnings
 		errs = packer.MultiErrorAppend(errs, errors.New("required suite"))
 	}
 
-	if b.config.MountPath == "" {
-		errs = packer.MultiErrorAppend(errs, errors.New("required mount_path"))
-	}
-
 	if b.config.MirrorURL == "" {
 		errs = packer.MultiErrorAppend(errs, errors.New("required mirror_url"))
 	}
