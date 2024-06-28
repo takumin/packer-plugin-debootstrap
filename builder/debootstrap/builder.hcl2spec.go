@@ -19,7 +19,7 @@ type FlatConfig struct {
 	PackerUserVars      map[string]string `mapstructure:"packer_user_variables" cty:"packer_user_variables" hcl:"packer_user_variables"`
 	PackerSensitiveVars []string          `mapstructure:"packer_sensitive_variables" cty:"packer_sensitive_variables" hcl:"packer_sensitive_variables"`
 	Suite               *string           `mapstructure:"suite" required:"true" cty:"suite" hcl:"suite"`
-	TargetDir           *string           `mapstructure:"target_dir" required:"true" cty:"target_dir" hcl:"target_dir"`
+	MountPath           *string           `mapstructure:"mount_path" required:"false" cty:"mount_path" hcl:"mount_path"`
 	MirrorURL           *string           `mapstructure:"mirror_url" required:"true" cty:"mirror_url" hcl:"mirror_url"`
 	CommandWrapper      *string           `mapstructure:"command_wrapper" required:"false" cty:"command_wrapper" hcl:"command_wrapper"`
 }
@@ -45,7 +45,7 @@ func (*FlatConfig) HCL2Spec() map[string]hcldec.Spec {
 		"packer_user_variables":      &hcldec.AttrSpec{Name: "packer_user_variables", Type: cty.Map(cty.String), Required: false},
 		"packer_sensitive_variables": &hcldec.AttrSpec{Name: "packer_sensitive_variables", Type: cty.List(cty.String), Required: false},
 		"suite":                      &hcldec.AttrSpec{Name: "suite", Type: cty.String, Required: false},
-		"target_dir":                 &hcldec.AttrSpec{Name: "target_dir", Type: cty.String, Required: false},
+		"mount_path":                 &hcldec.AttrSpec{Name: "mount_path", Type: cty.String, Required: false},
 		"mirror_url":                 &hcldec.AttrSpec{Name: "mirror_url", Type: cty.String, Required: false},
 		"command_wrapper":            &hcldec.AttrSpec{Name: "command_wrapper", Type: cty.String, Required: false},
 	}
