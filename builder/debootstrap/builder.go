@@ -35,7 +35,7 @@ type Config struct {
 	common.PackerConfig `mapstructure:",squash"`
 
 	Suite     string `mapstructure:"suite" required:"true"`
-	TargetDir string `mapstructure:"target_dir" required:"true"`
+	MountPath string `mapstructure:"mount_path" required:"false"`
 	MirrorURL string `mapstructure:"mirror_url" required:"true"`
 
 	CommandWrapper string `mapstructure:"command_wrapper" required:"false"`
@@ -80,8 +80,8 @@ func (b *Builder) Prepare(raws ...interface{}) (generatedVars []string, warnings
 		errs = packer.MultiErrorAppend(errs, errors.New("required suite"))
 	}
 
-	if b.config.TargetDir == "" {
-		errs = packer.MultiErrorAppend(errs, errors.New("required target_dir"))
+	if b.config.MountPath == "" {
+		errs = packer.MultiErrorAppend(errs, errors.New("required mount_path"))
 	}
 
 	if b.config.MirrorURL == "" {
@@ -110,9 +110,9 @@ func (b *Builder) Prepare(raws ...interface{}) (generatedVars []string, warnings
 func (b *Builder) Run(ctx context.Context, ui packer.Ui, hook packer.Hook) (packer.Artifact, error) {
 	steps := []multistep.Step{
 		&StepDebootstrap{
-			suite:     b.config.Suite,
-			targetDir: b.config.TargetDir,
-			mirrorURL: b.config.MirrorURL,
+			suite:      b.config.Suite,
+			mount_path: b.config.MountPath,
+			mirrorURL:  b.config.MirrorURL,
 		},
 		&chroot.StepChrootProvision{},
 	}
