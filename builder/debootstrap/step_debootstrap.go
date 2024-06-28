@@ -12,9 +12,9 @@ import (
 )
 
 type StepDebootstrap struct {
-	suite      string
-	mount_path string
-	mirrorURL  string
+	Suite     string
+	MountPath string
+	MirrorURL string
 }
 
 func (s *StepDebootstrap) Run(ctx context.Context, state multistep.StateBag) multistep.StepAction {
@@ -23,9 +23,9 @@ func (s *StepDebootstrap) Run(ctx context.Context, state multistep.StateBag) mul
 
 	debootstrapCommand, err := wrappedCommand(fmt.Sprintf(
 		"debootstrap %s %s %s",
-		s.suite,
-		s.mount_path,
-		s.mirrorURL,
+		s.Suite,
+		s.MountPath,
+		s.MirrorURL,
 	))
 	if err != nil {
 		ui.Error(err.Error())
