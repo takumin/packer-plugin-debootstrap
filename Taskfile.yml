@@ -79,6 +79,8 @@ tasks:
     run: once
     deps: [mod]
     sources:
+      - go.mod
+      - go.sum
       - '**/*.go'
     generates:
       - '**/*.hcl2spec.go'
@@ -89,6 +91,8 @@ tasks:
     run: once
     deps: [gen]
     sources:
+      - go.mod
+      - go.sum
       - '**/*.go'
     generates:
       - .task/.done_fmt
@@ -101,6 +105,8 @@ tasks:
     run: once
     deps: [fmt]
     sources:
+      - go.mod
+      - go.sum
       - '**/*.go'
     generates:
       - .task/.done_vet
@@ -113,6 +119,8 @@ tasks:
     run: once
     deps: [fmt]
     sources:
+      - go.mod
+      - go.sum
       - '**/*.go'
     generates:
       - .task/.done_sec
@@ -125,6 +133,8 @@ tasks:
     run: once
     deps: [fmt]
     sources:
+      - go.mod
+      - go.sum
       - '**/*.go'
     generates:
       - .task/.done_vuln
@@ -137,6 +147,8 @@ tasks:
     run: once
     deps: [fmt]
     sources:
+      - go.mod
+      - go.sum
       - '**/*.go'
     generates:
       - .task/.done_lint
@@ -149,6 +161,8 @@ tasks:
     run: once
     deps: [fmt]
     sources:
+      - go.mod
+      - go.sum
       - '**/*.go'
     generates:
       - coverage.out
@@ -161,6 +175,8 @@ tasks:
     run: once
     deps: [test]
     sources:
+      - go.mod
+      - go.sum
       - '**/*.go'
       - exclude: '**/*_test.go'
     generates:
