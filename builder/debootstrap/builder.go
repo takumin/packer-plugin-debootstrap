@@ -37,8 +37,10 @@ type Config struct {
 	common.PackerConfig `mapstructure:",squash"`
 
 	Suite     string `mapstructure:"suite" required:"true"`
-	MountPath string `mapstructure:"mount_path" required:"false"`
 	MirrorURL string `mapstructure:"mirror_url" required:"true"`
+
+	MountPath   string `mapstructure:"mount_path" required:"false"`
+	MountDevice string `mapstructure:"mount_device" required:"false"`
 
 	CommandWrapper string `mapstructure:"command_wrapper" required:"false"`
 
@@ -80,6 +82,10 @@ func (b *Builder) Prepare(raws ...interface{}) (generatedVars []string, warnings
 		b.config.MountPath = path.Join(os.TempDir(), "rootfs")
 	}
 
+	if b.config.MountDevice == "" {
+		b.config.MountDevice = "tmpfs"
+	}
+
 	var errs *packer.MultiError
 
 	if b.config.Suite == "" {
@@ -108,6 +114,12 @@ func (b *Builder) Prepare(raws ...interface{}) (generatedVars []string, warnings
 	}
 	b.config.MirrorURL = mirrorUrl.String()
 
+	switch b.config.MountDevice {
+	case "tmpfs":
+	default:
+		errs = packer.MultiErrorAppend(errs, fmt.Errorf("unsupported mount device type: %s", b.config.MountDevice))
+	}
+
 	if errs != nil && len(errs.Errors) > 0 {
 		return nil, warnings, errs
 	}
@@ -117,6 +129,13 @@ func (b *Builder) Prepare(raws ...interface{}) (generatedVars []string, warnings
 
 func (b *Builder) Run(ctx context.Context, ui packer.Ui, hook packer.Hook) (packer.Artifact, error) {
 	steps := []multistep.Step{
+		&StepPrepareMountPath{
+			MountPath: b.config.MountPath,
+		},
+		&StepMountDevice{
+			MountPath:   b.config.MountPath,
+			MountDevice: b.config.MountDevice,
+		},
 		&StepDebootstrap{
 			suite:      b.config.Suite,
 			mount_path: b.config.MountPath,
