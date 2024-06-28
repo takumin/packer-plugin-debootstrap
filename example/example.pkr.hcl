@@ -9,7 +9,7 @@ packer {
 
 source "debootstrap" "example" {
   suite      = "bullseye"
-  target_dir = "/tmp/rootfs"
+  mount_path = "/tmp/rootfs"
   mirror_url = "http://deb.debian.org/debian"
 }
 
