@@ -5,6 +5,7 @@ go 1.22.4
 require (
 	github.com/hashicorp/hcl/v2 v2.21.0
 	github.com/hashicorp/packer-plugin-sdk v0.5.4
+	github.com/moby/sys/mountinfo v0.7.1
 )
 
 require (

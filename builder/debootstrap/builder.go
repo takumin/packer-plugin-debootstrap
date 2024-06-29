@@ -39,8 +39,9 @@ type Config struct {
 	Suite     string `mapstructure:"suite" required:"true"`
 	MirrorURL string `mapstructure:"mirror_url" required:"true"`
 
-	MountPath   string `mapstructure:"mount_path" required:"false"`
-	MountDevice string `mapstructure:"mount_device" required:"false"`
+	MountPath         string     `mapstructure:"mount_path" required:"false"`
+	MountDevice       string     `mapstructure:"mount_device" required:"false"`
+	MountChrootDevice [][]string `mapstructure:"mount_chroot_device" required:"false"`
 
 	CommandWrapper string `mapstructure:"command_wrapper" required:"false"`
 
@@ -86,6 +87,21 @@ func (b *Builder) Prepare(raws ...interface{}) (generatedVars []string, warnings
 		b.config.MountDevice = "tmpfs"
 	}
 
+	if b.config.MountChrootDevice == nil {
+		b.config.MountChrootDevice = make([][]string, 0)
+	}
+
+	if len(b.config.MountChrootDevice) == 0 {
+		b.config.MountChrootDevice = [][]string{
+			{"devtmpfs", "devtmpfs", "/dev", ""},
+			{"devpts", "devpts", "/dev/pts", "gid=5,mode=620"},
+			{"proc", "proc", "/proc", ""},
+			{"sysfs", "sysfs", "/sys", ""},
+			{"tmpfs", "tmpfs", "/run", "mode=755"},
+			{"tmpfs", "tmpfs", "/tmp", ""},
+		}
+	}
+
 	var errs *packer.MultiError
 
 	if b.config.Suite == "" {
@@ -120,6 +136,14 @@ func (b *Builder) Prepare(raws ...interface{}) (generatedVars []string, warnings
 		errs = packer.MultiErrorAppend(errs, fmt.Errorf("unsupported mount device type: %s", b.config.MountDevice))
 	}
 
+	for _, mounts := range b.config.MountChrootDevice {
+		if len(mounts) != 4 {
+			errs = packer.MultiErrorAppend(
+				errs, errors.New("mount_chroot_device requires 4 elements"))
+			break
+		}
+	}
+
 	if errs != nil && len(errs.Errors) > 0 {
 		return nil, warnings, errs
 	}
@@ -140,6 +164,9 @@ func (b *Builder) Run(ctx context.Context, ui packer.Ui, hook packer.Hook) (pack
 			Suite:     b.config.Suite,
 			MountPath: b.config.MountPath,
 			MirrorURL: b.config.MirrorURL,
+		},
+		&StepMountChrootDevice{
+			MountChrootDevice: b.config.MountChrootDevice,
 		},
 		&chroot.StepChrootProvision{},
 	}

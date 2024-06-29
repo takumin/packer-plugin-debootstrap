@@ -22,6 +22,7 @@ type FlatConfig struct {
 	MirrorURL           *string           `mapstructure:"mirror_url" required:"true" cty:"mirror_url" hcl:"mirror_url"`
 	MountPath           *string           `mapstructure:"mount_path" required:"false" cty:"mount_path" hcl:"mount_path"`
 	MountDevice         *string           `mapstructure:"mount_device" required:"false" cty:"mount_device" hcl:"mount_device"`
+	MountChrootDevice   [][]string        `mapstructure:"mount_chroot_device" required:"false" cty:"mount_chroot_device" hcl:"mount_chroot_device"`
 	CommandWrapper      *string           `mapstructure:"command_wrapper" required:"false" cty:"command_wrapper" hcl:"command_wrapper"`
 }
 
@@ -49,6 +50,7 @@ func (*FlatConfig) HCL2Spec() map[string]hcldec.Spec {
 		"mirror_url":                 &hcldec.AttrSpec{Name: "mirror_url", Type: cty.String, Required: false},
 		"mount_path":                 &hcldec.AttrSpec{Name: "mount_path", Type: cty.String, Required: false},
 		"mount_device":               &hcldec.AttrSpec{Name: "mount_device", Type: cty.String, Required: false},
+		"mount_chroot_device":        &hcldec.AttrSpec{Name: "mount_chroot_device", Type: cty.List(cty.List(cty.String)), Required: false},
 		"command_wrapper":            &hcldec.AttrSpec{Name: "command_wrapper", Type: cty.String, Required: false},
 	}
 	return s
