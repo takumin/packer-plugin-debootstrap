@@ -10,20 +10,22 @@ import (
 // FlatConfig is an auto-generated flat version of Config.
 // Where the contents of a field with a `mapstructure:,squash` tag are bubbled up.
 type FlatConfig struct {
-	PackerBuildName     *string           `mapstructure:"packer_build_name" cty:"packer_build_name" hcl:"packer_build_name"`
-	PackerBuilderType   *string           `mapstructure:"packer_builder_type" cty:"packer_builder_type" hcl:"packer_builder_type"`
-	PackerCoreVersion   *string           `mapstructure:"packer_core_version" cty:"packer_core_version" hcl:"packer_core_version"`
-	PackerDebug         *bool             `mapstructure:"packer_debug" cty:"packer_debug" hcl:"packer_debug"`
-	PackerForce         *bool             `mapstructure:"packer_force" cty:"packer_force" hcl:"packer_force"`
-	PackerOnError       *string           `mapstructure:"packer_on_error" cty:"packer_on_error" hcl:"packer_on_error"`
-	PackerUserVars      map[string]string `mapstructure:"packer_user_variables" cty:"packer_user_variables" hcl:"packer_user_variables"`
-	PackerSensitiveVars []string          `mapstructure:"packer_sensitive_variables" cty:"packer_sensitive_variables" hcl:"packer_sensitive_variables"`
-	Suite               *string           `mapstructure:"suite" required:"true" cty:"suite" hcl:"suite"`
-	MirrorURL           *string           `mapstructure:"mirror_url" required:"true" cty:"mirror_url" hcl:"mirror_url"`
-	MountPath           *string           `mapstructure:"mount_path" required:"false" cty:"mount_path" hcl:"mount_path"`
-	MountDevice         *string           `mapstructure:"mount_device" required:"false" cty:"mount_device" hcl:"mount_device"`
-	MountChrootDevice   [][]string        `mapstructure:"mount_chroot_device" required:"false" cty:"mount_chroot_device" hcl:"mount_chroot_device"`
-	CommandWrapper      *string           `mapstructure:"command_wrapper" required:"false" cty:"command_wrapper" hcl:"command_wrapper"`
+	PackerBuildName      *string           `mapstructure:"packer_build_name" cty:"packer_build_name" hcl:"packer_build_name"`
+	PackerBuilderType    *string           `mapstructure:"packer_builder_type" cty:"packer_builder_type" hcl:"packer_builder_type"`
+	PackerCoreVersion    *string           `mapstructure:"packer_core_version" cty:"packer_core_version" hcl:"packer_core_version"`
+	PackerDebug          *bool             `mapstructure:"packer_debug" cty:"packer_debug" hcl:"packer_debug"`
+	PackerForce          *bool             `mapstructure:"packer_force" cty:"packer_force" hcl:"packer_force"`
+	PackerOnError        *string           `mapstructure:"packer_on_error" cty:"packer_on_error" hcl:"packer_on_error"`
+	PackerUserVars       map[string]string `mapstructure:"packer_user_variables" cty:"packer_user_variables" hcl:"packer_user_variables"`
+	PackerSensitiveVars  []string          `mapstructure:"packer_sensitive_variables" cty:"packer_sensitive_variables" hcl:"packer_sensitive_variables"`
+	Suite                *string           `mapstructure:"suite" required:"true" cty:"suite" hcl:"suite"`
+	MirrorURL            *string           `mapstructure:"mirror_url" required:"true" cty:"mirror_url" hcl:"mirror_url"`
+	MountPath            *string           `mapstructure:"mount_path" required:"false" cty:"mount_path" hcl:"mount_path"`
+	MountDevice          *string           `mapstructure:"mount_device" required:"false" cty:"mount_device" hcl:"mount_device"`
+	MountChrootDevice    [][]string        `mapstructure:"mount_chroot_device" required:"false" cty:"mount_chroot_device" hcl:"mount_chroot_device"`
+	CommandWrapper       *string           `mapstructure:"command_wrapper" required:"false" cty:"command_wrapper" hcl:"command_wrapper"`
+	RootfsArchivePath    *string           `mapstructure:"rootfs_archive_path" required:"false" cty:"rootfs_archive_path" hcl:"rootfs_archive_path"`
+	RootfsArchiveCommand *string           `mapstructure:"rootfs_archive_command" required:"false" cty:"rootfs_archive_command" hcl:"rootfs_archive_command"`
 }
 
 // FlatMapstructure returns a new FlatConfig.
@@ -52,6 +54,8 @@ func (*FlatConfig) HCL2Spec() map[string]hcldec.Spec {
 		"mount_device":               &hcldec.AttrSpec{Name: "mount_device", Type: cty.String, Required: false},
 		"mount_chroot_device":        &hcldec.AttrSpec{Name: "mount_chroot_device", Type: cty.List(cty.List(cty.String)), Required: false},
 		"command_wrapper":            &hcldec.AttrSpec{Name: "command_wrapper", Type: cty.String, Required: false},
+		"rootfs_archive_path":        &hcldec.AttrSpec{Name: "rootfs_archive_path", Type: cty.String, Required: false},
+		"rootfs_archive_command":     &hcldec.AttrSpec{Name: "rootfs_archive_command", Type: cty.String, Required: false},
 	}
 	return s
 }

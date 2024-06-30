@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/url"
 	"os"
+	"os/exec"
 	"path"
 	"path/filepath"
 	"strings"
@@ -44,6 +45,9 @@ type Config struct {
 	MountChrootDevice [][]string `mapstructure:"mount_chroot_device" required:"false"`
 
 	CommandWrapper string `mapstructure:"command_wrapper" required:"false"`
+
+	RootfsArchivePath    string `mapstructure:"rootfs_archive_path" required:"false"`
+	RootfsArchiveCommand string `mapstructure:"rootfs_archive_command" required:"false"`
 
 	ctx interpolate.Context
 }
@@ -102,6 +106,28 @@ func (b *Builder) Prepare(raws ...interface{}) (generatedVars []string, warnings
 		}
 	}
 
+	if b.config.RootfsArchivePath == "" {
+		switch b.config.MountDevice {
+		case "tmpfs":
+			b.config.RootfsArchivePath = "rootfs.tar.zstd"
+		}
+	}
+
+	if b.config.RootfsArchiveCommand == "" {
+		switch filepath.Ext(b.config.RootfsArchivePath) {
+		case ".tbz2", ".bz2", ".bzip2":
+			b.config.RootfsArchiveCommand = "pbzip2"
+		case ".tgz", ".gz", ".gzip":
+			b.config.RootfsArchiveCommand = "pigz"
+		case ".txz", ".xz":
+			b.config.RootfsArchiveCommand = "pixz"
+		case ".tzstd", ".zstd":
+			b.config.RootfsArchiveCommand = "zstd"
+		default: // include plain tarball
+			b.config.RootfsArchiveCommand = ""
+		}
+	}
+
 	var errs *packer.MultiError
 
 	if b.config.Suite == "" {
@@ -144,6 +170,18 @@ func (b *Builder) Prepare(raws ...interface{}) (generatedVars []string, warnings
 		}
 	}
 
+	rootfs_archive_path, err := filepath.Abs(b.config.RootfsArchivePath)
+	if err != nil {
+		errs = packer.MultiErrorAppend(errs, fmt.Errorf("rootfs archive path: %w", err))
+	}
+	b.config.RootfsArchivePath = rootfs_archive_path
+
+	if b.config.RootfsArchiveCommand != "" {
+		if _, err := exec.LookPath(b.config.RootfsArchiveCommand); err != nil {
+			errs = packer.MultiErrorAppend(errs, fmt.Errorf("rootfs archive command: %w", err))
+		}
+	}
+
 	if errs != nil && len(errs.Errors) > 0 {
 		return nil, warnings, errs
 	}
@@ -170,6 +208,11 @@ func (b *Builder) Run(ctx context.Context, ui packer.Ui, hook packer.Hook) (pack
 		},
 		&chroot.StepChrootProvision{},
 		&StepEarlyCleanup{},
+		&StepRootfsArchive{
+			MountPath:            b.config.MountPath,
+			RootfsArchivePath:    b.config.RootfsArchivePath,
+			RootfsArchiveCommand: b.config.RootfsArchiveCommand,
+		},
 	}
 
 	wrappedCommand := func(command string) (string, error) {
