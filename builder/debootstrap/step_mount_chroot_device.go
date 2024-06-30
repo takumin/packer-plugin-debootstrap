@@ -72,6 +72,8 @@ func (s *StepMountChrootDevice) Run(ctx context.Context, state multistep.StateBa
 		}
 	}
 
+	state.Put("mount_chroot_device_cleanup", s)
+
 	return multistep.ActionContinue
 }
 

@@ -169,6 +169,7 @@ func (b *Builder) Run(ctx context.Context, ui packer.Ui, hook packer.Hook) (pack
 			MountChrootDevice: b.config.MountChrootDevice,
 		},
 		&chroot.StepChrootProvision{},
+		&StepEarlyCleanup{},
 	}
 
 	wrappedCommand := func(command string) (string, error) {
