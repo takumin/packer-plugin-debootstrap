@@ -3,6 +3,7 @@ package debootstrap
 import (
 	"context"
 	"fmt"
+	"log"
 	"path"
 	"slices"
 	"strings"
@@ -62,7 +63,7 @@ func (s *StepMountChrootDevice) Run(ctx context.Context, state multistep.StateBa
 			return multistep.ActionHalt
 		}
 
-		ui.Message(fmt.Sprintf("mount command: %s", mountCommand))
+		log.Printf("[DEBUG] (chroot) mount command: %s", mountCommand)
 		mountShellCommand := common.ShellCommand(mountCommand)
 		if err := mountShellCommand.Run(); err != nil {
 			ui.Error(err.Error())
@@ -100,7 +101,7 @@ func (s *StepMountChrootDevice) Cleanup(state multistep.StateBag) {
 				return
 			}
 
-			ui.Message(fmt.Sprintf("umount command: %s", umountCommand))
+			log.Printf("[DEBUG] (chroot) umount command: %s", umountCommand)
 			umountShellCommand := common.ShellCommand(umountCommand)
 			if err := umountShellCommand.Run(); err != nil {
 				ui.Error(err.Error())

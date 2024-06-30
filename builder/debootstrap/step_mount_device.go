@@ -3,6 +3,7 @@ package debootstrap
 import (
 	"context"
 	"fmt"
+	"log"
 
 	"github.com/hashicorp/packer-plugin-sdk/common"
 	"github.com/hashicorp/packer-plugin-sdk/multistep"
@@ -29,6 +30,7 @@ func (s *StepMountDevice) Run(ctx context.Context, state multistep.StateBag) mul
 			return multistep.ActionHalt
 		}
 
+		log.Printf("[DEBUG] (rootfs) mount command: %s", mountCommand)
 		cmd := common.ShellCommand(mountCommand)
 		if err := cmd.Run(); err != nil {
 			ui.Error(err.Error())
@@ -55,6 +57,7 @@ func (s *StepMountDevice) Cleanup(state multistep.StateBag) {
 		return
 	}
 
+	log.Printf("[DEBUG] (rootfs) umount command: %s", cleanupCommand)
 	cmd := common.ShellCommand(cleanupCommand)
 	if err := cmd.Run(); err != nil {
 		ui.Error(err.Error())
