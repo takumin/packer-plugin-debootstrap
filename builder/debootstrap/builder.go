@@ -40,6 +40,8 @@ type Config struct {
 	Suite     string `mapstructure:"suite" required:"true"`
 	MirrorURL string `mapstructure:"mirror_url" required:"true"`
 
+	Variant string `mapstructure:"variant" required:"false"`
+
 	MountPath         string     `mapstructure:"mount_path" required:"false"`
 	MountDevice       string     `mapstructure:"mount_device" required:"false"`
 	MountChrootDevice [][]string `mapstructure:"mount_chroot_device" required:"false"`
@@ -156,6 +158,12 @@ func (b *Builder) Prepare(raws ...interface{}) (generatedVars []string, warnings
 	}
 	b.config.MirrorURL = mirrorUrl.String()
 
+	switch b.config.Variant {
+	case "", "buildd", "fakechroot", "minbase":
+	default:
+		errs = packer.MultiErrorAppend(errs, fmt.Errorf("debootstrap variant: unknown variant: %s", b.config.Variant))
+	}
+
 	switch b.config.MountDevice {
 	case "tmpfs":
 	default:
@@ -200,6 +208,7 @@ func (b *Builder) Run(ctx context.Context, ui packer.Ui, hook packer.Hook) (pack
 		},
 		&StepDebootstrap{
 			Suite:     b.config.Suite,
+			Variant:   b.config.Variant,
 			MountPath: b.config.MountPath,
 			MirrorURL: b.config.MirrorURL,
 		},

@@ -20,6 +20,7 @@ type FlatConfig struct {
 	PackerSensitiveVars  []string          `mapstructure:"packer_sensitive_variables" cty:"packer_sensitive_variables" hcl:"packer_sensitive_variables"`
 	Suite                *string           `mapstructure:"suite" required:"true" cty:"suite" hcl:"suite"`
 	MirrorURL            *string           `mapstructure:"mirror_url" required:"true" cty:"mirror_url" hcl:"mirror_url"`
+	Variant              *string           `mapstructure:"variant" required:"false" cty:"variant" hcl:"variant"`
 	MountPath            *string           `mapstructure:"mount_path" required:"false" cty:"mount_path" hcl:"mount_path"`
 	MountDevice          *string           `mapstructure:"mount_device" required:"false" cty:"mount_device" hcl:"mount_device"`
 	MountChrootDevice    [][]string        `mapstructure:"mount_chroot_device" required:"false" cty:"mount_chroot_device" hcl:"mount_chroot_device"`
@@ -50,6 +51,7 @@ func (*FlatConfig) HCL2Spec() map[string]hcldec.Spec {
 		"packer_sensitive_variables": &hcldec.AttrSpec{Name: "packer_sensitive_variables", Type: cty.List(cty.String), Required: false},
 		"suite":                      &hcldec.AttrSpec{Name: "suite", Type: cty.String, Required: false},
 		"mirror_url":                 &hcldec.AttrSpec{Name: "mirror_url", Type: cty.String, Required: false},
+		"variant":                    &hcldec.AttrSpec{Name: "variant", Type: cty.String, Required: false},
 		"mount_path":                 &hcldec.AttrSpec{Name: "mount_path", Type: cty.String, Required: false},
 		"mount_device":               &hcldec.AttrSpec{Name: "mount_device", Type: cty.String, Required: false},
 		"mount_chroot_device":        &hcldec.AttrSpec{Name: "mount_chroot_device", Type: cty.List(cty.List(cty.String)), Required: false},

@@ -9,6 +9,7 @@ packer {
 
 source "debootstrap" "example" {
   suite      = "bullseye"
+  variant    = "minbase"
   mirror_url = "http://deb.debian.org/debian"
 }
 
