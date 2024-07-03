@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"os/exec"
+	"strings"
 
 	"github.com/hashicorp/packer-plugin-sdk/common"
 	"github.com/hashicorp/packer-plugin-sdk/multistep"
@@ -13,6 +14,7 @@ import (
 
 type StepDebootstrap struct {
 	Suite     string
+	Variant   string
 	MountPath string
 	MirrorURL string
 }
@@ -21,11 +23,19 @@ func (s *StepDebootstrap) Run(ctx context.Context, state multistep.StateBag) mul
 	ui := state.Get("ui").(packer.Ui)
 	wrappedCommand := state.Get("wrappedCommand").(common.CommandWrapper)
 
+	flags := make([]string, 0, 16)
+
+	if s.Variant != "" {
+		flags = append(flags, "--variant", s.Variant)
+	}
+
+	flags = append(flags, s.Suite)
+	flags = append(flags, s.MountPath)
+	flags = append(flags, s.MirrorURL)
+
 	debootstrapCommand, err := wrappedCommand(fmt.Sprintf(
-		"debootstrap %s %s %s",
-		s.Suite,
-		s.MountPath,
-		s.MirrorURL,
+		"debootstrap %s",
+		strings.Join(flags, " "),
 	))
 	if err != nil {
 		ui.Error(err.Error())
