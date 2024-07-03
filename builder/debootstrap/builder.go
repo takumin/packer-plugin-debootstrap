@@ -9,6 +9,7 @@ import (
 	"net/url"
 	"os"
 	"os/exec"
+	"os/user"
 	"path"
 	"path/filepath"
 	"strings"
@@ -50,6 +51,8 @@ type Config struct {
 
 	RootfsArchivePath    string `mapstructure:"rootfs_archive_path" required:"false"`
 	RootfsArchiveCommand string `mapstructure:"rootfs_archive_command" required:"false"`
+	RootfsArchiveUid     string `mapstructure:"rootfs_archive_uid" required:"false"`
+	RootfsArchiveGid     string `mapstructure:"rootfs_archive_gid" required:"false"`
 
 	ctx interpolate.Context
 }
@@ -190,6 +193,19 @@ func (b *Builder) Prepare(raws ...interface{}) (generatedVars []string, warnings
 		}
 	}
 
+	if b.config.RootfsArchiveUid == "" || b.config.RootfsArchiveGid == "" {
+		owner, err := user.Current()
+		if err != nil {
+			errs = packer.MultiErrorAppend(errs, fmt.Errorf("rootfs archive owner: %w", err))
+		}
+		if b.config.RootfsArchiveUid == "" {
+			b.config.RootfsArchiveUid = owner.Uid
+		}
+		if b.config.RootfsArchiveGid == "" {
+			b.config.RootfsArchiveGid = owner.Gid
+		}
+	}
+
 	if errs != nil && len(errs.Errors) > 0 {
 		return nil, warnings, errs
 	}
@@ -221,6 +237,8 @@ func (b *Builder) Run(ctx context.Context, ui packer.Ui, hook packer.Hook) (pack
 			MountPath:            b.config.MountPath,
 			RootfsArchivePath:    b.config.RootfsArchivePath,
 			RootfsArchiveCommand: b.config.RootfsArchiveCommand,
+			RootfsArchiveUid:     b.config.RootfsArchiveUid,
+			RootfsArchiveGid:     b.config.RootfsArchiveGid,
 		},
 	}
 
