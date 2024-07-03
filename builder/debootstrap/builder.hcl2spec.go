@@ -27,6 +27,8 @@ type FlatConfig struct {
 	CommandWrapper       *string           `mapstructure:"command_wrapper" required:"false" cty:"command_wrapper" hcl:"command_wrapper"`
 	RootfsArchivePath    *string           `mapstructure:"rootfs_archive_path" required:"false" cty:"rootfs_archive_path" hcl:"rootfs_archive_path"`
 	RootfsArchiveCommand *string           `mapstructure:"rootfs_archive_command" required:"false" cty:"rootfs_archive_command" hcl:"rootfs_archive_command"`
+	RootfsArchiveUid     *string           `mapstructure:"rootfs_archive_uid" required:"false" cty:"rootfs_archive_uid" hcl:"rootfs_archive_uid"`
+	RootfsArchiveGid     *string           `mapstructure:"rootfs_archive_gid" required:"false" cty:"rootfs_archive_gid" hcl:"rootfs_archive_gid"`
 }
 
 // FlatMapstructure returns a new FlatConfig.
@@ -58,6 +60,8 @@ func (*FlatConfig) HCL2Spec() map[string]hcldec.Spec {
 		"command_wrapper":            &hcldec.AttrSpec{Name: "command_wrapper", Type: cty.String, Required: false},
 		"rootfs_archive_path":        &hcldec.AttrSpec{Name: "rootfs_archive_path", Type: cty.String, Required: false},
 		"rootfs_archive_command":     &hcldec.AttrSpec{Name: "rootfs_archive_command", Type: cty.String, Required: false},
+		"rootfs_archive_uid":         &hcldec.AttrSpec{Name: "rootfs_archive_uid", Type: cty.String, Required: false},
+		"rootfs_archive_gid":         &hcldec.AttrSpec{Name: "rootfs_archive_gid", Type: cty.String, Required: false},
 	}
 	return s
 }
