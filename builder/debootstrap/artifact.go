@@ -1,6 +1,12 @@
 package debootstrap
 
+import (
+	"fmt"
+	"os"
+)
+
 type Artifact struct {
+	path      string
 	StateData map[string]interface{}
 }
 
@@ -9,7 +15,7 @@ func (*Artifact) BuilderId() string {
 }
 
 func (a *Artifact) Files() []string {
-	return []string{}
+	return []string{a.path}
 }
 
 func (*Artifact) Id() string {
@@ -17,7 +23,7 @@ func (*Artifact) Id() string {
 }
 
 func (a *Artifact) String() string {
-	return ""
+	return fmt.Sprintf("Rootfs Tarball File: %s", a.path)
 }
 
 func (a *Artifact) State(name string) interface{} {
@@ -25,5 +31,8 @@ func (a *Artifact) State(name string) interface{} {
 }
 
 func (a *Artifact) Destroy() error {
+	if a.path != "" {
+		return os.Remove(a.path)
+	}
 	return nil
 }
