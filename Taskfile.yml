@@ -46,7 +46,7 @@ tasks:
     cmds:
       - rm -f coverage.out
       - rm -f coverage.html
-      - rm -f rootfs.tar.*
+      - rm -f rootfs.*
       - rm -fr bin
       - rm -fr .task
 
