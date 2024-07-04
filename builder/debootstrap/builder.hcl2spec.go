@@ -29,6 +29,11 @@ type FlatConfig struct {
 	RootfsArchiveCommand *string           `mapstructure:"rootfs_archive_command" required:"false" cty:"rootfs_archive_command" hcl:"rootfs_archive_command"`
 	RootfsArchiveUid     *string           `mapstructure:"rootfs_archive_uid" required:"false" cty:"rootfs_archive_uid" hcl:"rootfs_archive_uid"`
 	RootfsArchiveGid     *string           `mapstructure:"rootfs_archive_gid" required:"false" cty:"rootfs_archive_gid" hcl:"rootfs_archive_gid"`
+	SquashfsPath         *string           `mapstructure:"squashfs_path" required:"false" cty:"squashfs_path" hcl:"squashfs_path"`
+	SquashfsCommand      *string           `mapstructure:"squashfs_command" required:"false" cty:"squashfs_command" hcl:"squashfs_command"`
+	SquashfsFormat       *string           `mapstructure:"squashfs_format" required:"false" cty:"squashfs_format" hcl:"squashfs_format"`
+	SquashfsUid          *string           `mapstructure:"squashfs_uid" required:"false" cty:"squashfs_uid" hcl:"squashfs_uid"`
+	SquashfsGid          *string           `mapstructure:"squashfs_gid" required:"false" cty:"squashfs_gid" hcl:"squashfs_gid"`
 }
 
 // FlatMapstructure returns a new FlatConfig.
@@ -62,6 +67,11 @@ func (*FlatConfig) HCL2Spec() map[string]hcldec.Spec {
 		"rootfs_archive_command":     &hcldec.AttrSpec{Name: "rootfs_archive_command", Type: cty.String, Required: false},
 		"rootfs_archive_uid":         &hcldec.AttrSpec{Name: "rootfs_archive_uid", Type: cty.String, Required: false},
 		"rootfs_archive_gid":         &hcldec.AttrSpec{Name: "rootfs_archive_gid", Type: cty.String, Required: false},
+		"squashfs_path":              &hcldec.AttrSpec{Name: "squashfs_path", Type: cty.String, Required: false},
+		"squashfs_command":           &hcldec.AttrSpec{Name: "squashfs_command", Type: cty.String, Required: false},
+		"squashfs_format":            &hcldec.AttrSpec{Name: "squashfs_format", Type: cty.String, Required: false},
+		"squashfs_uid":               &hcldec.AttrSpec{Name: "squashfs_uid", Type: cty.String, Required: false},
+		"squashfs_gid":               &hcldec.AttrSpec{Name: "squashfs_gid", Type: cty.String, Required: false},
 	}
 	return s
 }

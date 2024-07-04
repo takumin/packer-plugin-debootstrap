@@ -54,6 +54,12 @@ type Config struct {
 	RootfsArchiveUid     string `mapstructure:"rootfs_archive_uid" required:"false"`
 	RootfsArchiveGid     string `mapstructure:"rootfs_archive_gid" required:"false"`
 
+	SquashfsPath    string `mapstructure:"squashfs_path" required:"false"`
+	SquashfsCommand string `mapstructure:"squashfs_command" required:"false"`
+	SquashfsFormat  string `mapstructure:"squashfs_format" required:"false"`
+	SquashfsUid     string `mapstructure:"squashfs_uid" required:"false"`
+	SquashfsGid     string `mapstructure:"squashfs_gid" required:"false"`
+
 	ctx interpolate.Context
 }
 
@@ -133,6 +139,21 @@ func (b *Builder) Prepare(raws ...interface{}) (generatedVars []string, warnings
 		}
 	}
 
+	if b.config.SquashfsPath == "" {
+		switch b.config.MountDevice {
+		case "tmpfs":
+			b.config.SquashfsPath = "rootfs.squashfs"
+		}
+	}
+
+	if b.config.SquashfsCommand == "" {
+		b.config.SquashfsCommand = "mksquashfs"
+	}
+
+	if b.config.SquashfsFormat == "" {
+		b.config.SquashfsFormat = "zstd"
+	}
+
 	var errs *packer.MultiError
 
 	if b.config.Suite == "" {
@@ -195,18 +216,34 @@ func (b *Builder) Prepare(raws ...interface{}) (generatedVars []string, warnings
 		b.config.RootfsArchiveCommand = rootfs_archive_command
 	}
 
-	if b.config.RootfsArchiveUid == "" || b.config.RootfsArchiveGid == "" {
-		owner, err := user.Current()
-		if err != nil {
-			errs = packer.MultiErrorAppend(errs, fmt.Errorf("rootfs archive owner: %w", err))
-		}
-		if b.config.RootfsArchiveUid == "" {
-			b.config.RootfsArchiveUid = owner.Uid
-		}
-		if b.config.RootfsArchiveGid == "" {
-			b.config.RootfsArchiveGid = owner.Gid
-		}
+	owner, err := user.Current()
+	if err != nil {
+		errs = packer.MultiErrorAppend(errs, fmt.Errorf("rootfs archive owner: %w", err))
 	}
+	if b.config.RootfsArchiveUid == "" {
+		b.config.RootfsArchiveUid = owner.Uid
+	}
+	if b.config.RootfsArchiveGid == "" {
+		b.config.RootfsArchiveGid = owner.Gid
+	}
+	if b.config.SquashfsUid == "" {
+		b.config.SquashfsUid = owner.Uid
+	}
+	if b.config.SquashfsGid == "" {
+		b.config.SquashfsGid = owner.Gid
+	}
+
+	squashfs_path, err := filepath.Abs(b.config.SquashfsPath)
+	if err != nil {
+		errs = packer.MultiErrorAppend(errs, fmt.Errorf("squashfs path: %w", err))
+	}
+	b.config.SquashfsPath = squashfs_path
+
+	squashfs_command, err := exec.LookPath(b.config.SquashfsCommand)
+	if err != nil {
+		errs = packer.MultiErrorAppend(errs, fmt.Errorf("squashfs command: %w", err))
+	}
+	b.config.SquashfsCommand = squashfs_command
 
 	if errs != nil && len(errs.Errors) > 0 {
 		return nil, warnings, errs
@@ -241,6 +278,14 @@ func (b *Builder) Run(ctx context.Context, ui packer.Ui, hook packer.Hook) (pack
 			RootfsArchiveCommand: b.config.RootfsArchiveCommand,
 			RootfsArchiveUid:     b.config.RootfsArchiveUid,
 			RootfsArchiveGid:     b.config.RootfsArchiveGid,
+		},
+		&StepMakeSquashfs{
+			MountPath:       b.config.MountPath,
+			SquashfsPath:    b.config.SquashfsPath,
+			SquashfsCommand: b.config.SquashfsCommand,
+			SquashfsFormat:  b.config.SquashfsFormat,
+			SquashfsUid:     b.config.SquashfsUid,
+			SquashfsGid:     b.config.SquashfsGid,
 		},
 	}
 

@@ -6,4 +6,4 @@ crash.log
 .packer-api-version
 coverage.out
 coverage.html
-rootfs.tar.*
+rootfs.*
