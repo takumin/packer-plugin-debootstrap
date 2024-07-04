@@ -188,9 +188,11 @@ func (b *Builder) Prepare(raws ...interface{}) (generatedVars []string, warnings
 	b.config.RootfsArchivePath = rootfs_archive_path
 
 	if b.config.RootfsArchiveCommand != "" {
-		if _, err := exec.LookPath(b.config.RootfsArchiveCommand); err != nil {
+		rootfs_archive_command, err := exec.LookPath(b.config.RootfsArchiveCommand)
+		if err != nil {
 			errs = packer.MultiErrorAppend(errs, fmt.Errorf("rootfs archive command: %w", err))
 		}
+		b.config.RootfsArchiveCommand = rootfs_archive_command
 	}
 
 	if b.config.RootfsArchiveUid == "" || b.config.RootfsArchiveGid == "" {
