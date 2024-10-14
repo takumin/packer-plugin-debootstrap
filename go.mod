@@ -8,6 +8,8 @@ require (
 	github.com/moby/sys/mountinfo v0.7.2
 )
 
+require github.com/apparentlymart/go-textseg/v15 v15.0.0 // indirect
+
 require (
 	cel.dev/expr v0.16.2 // indirect
 	cloud.google.com/go v0.116.0 // indirect
@@ -24,7 +26,6 @@ require (
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping v0.48.2 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
-	github.com/apparentlymart/go-textseg/v15 v15.0.0 // indirect
 	github.com/armon/go-metrics v0.4.1 // indirect
 	github.com/aws/aws-sdk-go v1.55.5 // indirect
 	github.com/bgentry/go-netrc v0.0.0-20140422174119-9fd32a8b3d3d // indirect
