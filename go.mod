@@ -8,7 +8,7 @@ require (
 	github.com/moby/sys/mountinfo v0.7.2
 )
 
-require github.com/apparentlymart/go-textseg/v15 v15.0.0 // indirect
+require github.com/apparentlymart/go-textseg/v16 v16.0.0 // indirect
 
 require (
 	cel.dev/expr v0.19.1 // indirect
