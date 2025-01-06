@@ -122,7 +122,7 @@ require (
 	golang.org/x/time v0.9.0 // indirect
 	golang.org/x/tools v0.28.0 // indirect
 	google.golang.org/api v0.214.0 // indirect
-	google.golang.org/genproto v0.0.0-20250102185135-69823020774d // indirect
+	google.golang.org/genproto v0.0.0-20250106144421-5f5ef82da422 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20250102185135-69823020774d // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250102185135-69823020774d // indirect
 	google.golang.org/grpc v1.68.1 // indirect
