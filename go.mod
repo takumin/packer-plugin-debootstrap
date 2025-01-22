@@ -8,7 +8,7 @@ require (
 	github.com/moby/sys/mountinfo v0.7.2
 )
 
-require github.com/cenkalti/backoff/v4 v4.3.0 // indirect
+require github.com/cenkalti/backoff/v5 v5.0.1 // indirect
 
 require (
 	cel.dev/expr v0.19.1 // indirect
