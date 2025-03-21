@@ -19,4 +19,4 @@ packages:
 - name: hashicorp/packer-plugin-sdk/packer-sdc@v0.6.0
 - name: hashicorp/packer@v1.12.0
 - name: takumin/gyaml@v0.0.2
-- name: editorconfig-checker/editorconfig-checker@v3.2.0
+- name: editorconfig-checker/editorconfig-checker@v3.2.1
