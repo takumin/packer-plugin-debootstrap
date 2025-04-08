@@ -15,7 +15,7 @@
 			"groupName": "packer-plugin-sdk",
 			"matchPackageNames": [
 				"github.com/hashicorp/packer-plugin-sdk",
-				"hashicorp/packer-plugin-sdk"
+				"hashicorp/packer-plugin-sdk/packer-sdc"
 			]
 		},
 		{
