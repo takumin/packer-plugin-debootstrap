@@ -12,12 +12,20 @@
 	},
 	"packageRules": [
 		{
+			"groupName": "packer-plugin-sdk",
+			"matchPackageNames": [
+				"github.com/hashicorp/packer-plugin-sdk",
+				"hashicorp/packer-plugin-sdk"
+			]
+		},
+		{
 			"matchDatasources": ["golang-version"],
 			"rangeStrategy": "bump"
 		},
 		{
 			"matchManagers": ["gomod"],
 			"matchDepTypes": ["indirect"],
+			"prPriority": -1,
 			"enabled": true
 		}
 	]
