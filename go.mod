@@ -13,7 +13,7 @@ require github.com/cenkalti/backoff/v4 v4.3.0 // indirect
 require (
 	cel.dev/expr v0.21.2 // indirect
 	cloud.google.com/go v0.118.0 // indirect
-	cloud.google.com/go/auth v0.14.0 // indirect
+	cloud.google.com/go/auth v0.16.0 // indirect
 	cloud.google.com/go/auth/oauth2adapt v0.2.7 // indirect
 	cloud.google.com/go/compute/metadata v0.6.0 // indirect
 	cloud.google.com/go/iam v1.3.1 // indirect
